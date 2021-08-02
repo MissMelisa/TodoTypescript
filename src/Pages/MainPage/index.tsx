@@ -8,23 +8,32 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Task from "../../Components/Task";
 
 type ItemValue = {
   id: number;
   value: string;
+  checked: boolean;
 };
 
 export default function MainPage() {
   const [items, setItems] = useState<ItemValue[]>([]);
   const [value, setValue] = useState<string>("");
+  useEffect(() => {
+    setItems(JSON.parse(localStorage.getItem("myList")) || []);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("myList", JSON.stringify(items));
+  }, [items]);
 
   function handleOnSubmit() {
     const todo = {
       id: items.length + 1,
       value: value,
+      checked: false,
     };
     setItems([...items, todo]);
   }
@@ -44,6 +53,12 @@ export default function MainPage() {
       return;
     }
     editItem.value = value;
+    setItems(newItems);
+  }
+  function handleOnClickChecked(id: number, checked: boolean) {
+    const newItems = [...items];
+    const myTodo = items.find((i) => i.id === id);
+    myTodo.checked = !myTodo.checked;
     setItems(newItems);
   }
 
@@ -91,7 +106,9 @@ export default function MainPage() {
               id={item.id}
               key={index}
               text={item.value}
+              checked={item.checked}
               onClick={() => handleOnDelete(item)}
+              onChange={() => handleOnClickChecked(item.id, !item.checked)}
             />
           ))}
         </HStack>

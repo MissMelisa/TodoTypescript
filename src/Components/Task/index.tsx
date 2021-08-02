@@ -1,5 +1,6 @@
 import { CheckIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { Box, Input, Text } from "@chakra-ui/react";
+import { Box, Checkbox, Input, Text } from "@chakra-ui/react";
+
 import React from "react";
 import { useState } from "react";
 
@@ -8,9 +9,18 @@ type TaskProps = {
   id: number;
   onEditItem: (id: number, value: string) => void;
   onClick: () => void;
+  checked: boolean;
+  onChange: () => void;
 };
 
-export default function Task({ text, id, onClick, onEditItem }: TaskProps) {
+export default function Task({
+  text,
+  id,
+  onClick,
+  onEditItem,
+  checked,
+  onChange,
+}: TaskProps) {
   const [edit, setEdit] = useState<boolean>(false);
   const [newValue, setNewValue] = useState<string>(text);
   function handleEdit() {
@@ -32,9 +42,15 @@ export default function Task({ text, id, onClick, onEditItem }: TaskProps) {
       boxShadow="base"
       minWidth="400px"
       alignItems="center"
+      justifyContent="space-between"
       width="100%"
     >
-      <DeleteIcon onClick={onClick} m={5} />
+      <Box display="flex" flexDirection="column" alignItems="flexStart" m={5}>
+        <DeleteIcon onClick={onClick} />
+        <Checkbox colorScheme="green" checked={checked} onChange={onChange}>
+          Done
+        </Checkbox>
+      </Box>
 
       {edit === true ? (
         <>
@@ -46,7 +62,16 @@ export default function Task({ text, id, onClick, onEditItem }: TaskProps) {
         </>
       ) : (
         <>
-          <Text fontSize="30px">{text}</Text>
+          {checked === true ? (
+            <Text fontSize="30px" alignSelf="center" as="s">
+              {text}
+            </Text>
+          ) : (
+            <Text fontSize="30px" alignSelf="center" as="i">
+              {text}
+            </Text>
+          )}
+
           <EditIcon m={8} onClick={handleEdit} />
         </>
       )}
