@@ -52,7 +52,7 @@ export default function MainPage() {
       <Text fontSize="50px" color="teal" as="i">
         ToDo
       </Text>
-      <div>
+      <Box>
         <InputGroup size="md" display="flex" flexDirection="column">
           <Input
             pr="4.5rem"
@@ -73,7 +73,7 @@ export default function MainPage() {
             Add
           </Button>
         </InputGroup>
-      </div>
+      </Box>
       <div>
         <Text fontSize="4xl" color="gray.500" p={6} display="flex">
           Tasks
